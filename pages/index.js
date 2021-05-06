@@ -11,8 +11,8 @@ export default function Home() {
 useEffect(() => {
   getPosts(url, setIsLoading)
   .then(response => {
-    console.log('test', response)
-    setPosts([...posts, ...response.posts])
+    setPosts(response.posts)
+    console.log('posts: ', posts)
   });
 }, [])
 
@@ -38,17 +38,23 @@ useEffect(() => {
           </p>
         </div>
         <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
-          {posts.map((post) => (
-            <div key={post.title} className="flex flex-col rounded-lg shadow-lg overflow-hidden">
+          {posts.map((post, i) => (
+            <div key={i} className="flex flex-col rounded-lg shadow-lg overflow-hidden">
               <div className="flex-shrink-0">
                 <img className="h-48 w-full object-cover" src={post.imageUrl} alt="" />
               </div>
               <div className="flex-1 bg-white p-6 flex flex-col justify-between">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-indigo-600">
-                    <a href={post.category.href} className="hover:underline">
-                      {post.category.name}
-                    </a>
+                    {post.tags.length && post.tags.map((tag,i) => {
+                      return (
+                        <span>
+                          <a href={tag.href} className="hover:underline">
+                            {tag.name}
+                          </a>{(i !== post.tags.length - 1) && ','}
+                       </span>
+                      )
+                    })}
                   </p>
                   <a href={post.href} className="block mt-2">
                     <p className="text-xl font-semibold text-gray-900">{post.title}</p>

@@ -7,30 +7,27 @@ export const getPosts = async (url, isLoadingCallback) => {
     Object.keys(data.files).map(item => console.log(item))
     
     const files = Object.keys(data.files).map(fileName => {
-      const {title, content, date, imageUrl} = formatContent(data.files[fileName].content)
+      const {authorName, description, tags, authorImage, preview, title, content, date, imageUrl} = formatContent(data.files[fileName].content)
       return {
         filename: `${fileName}`,
         content,
         title,
         href: "#",
-        category: { name: 'Case Study', href: '#' },
-        description:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint harum rerum voluptatem quo recusandae magni placeat saepe molestiae, sed excepturi cumque corporis perferendis hic.',
+        tags: tags.map(tag => {return {name: tag, href: tag}}),
+        description,
         imageUrl,
-        datetime: '2020-02-12',
+        datetime: date,
         date,
-        readingTime: '11 min',
+        readingTime: `${Math.max(1, Math.round(content.length / 200))} min` ,
         author: {
-          name: 'Daniela Metz',
+          name: authorName,
           href: '#',
-          imageUrl:
-            'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+          imageUrl: authorImage // add null option here
         },
 
       }
     })
 
-    console.log('files in gist: ', files) 
     files.sort((a,b) => { return new Date(b.date) - new Date(a.date) })
     return  {posts: files}
   } catch (error) {
@@ -43,37 +40,18 @@ export const getPosts = async (url, isLoadingCallback) => {
 };
 
 const formatContent = (content) => {
-  let title = content.split('---')[1].split('\n')[2].split(':')[1] + `\n\n\n\n`;
-  return {
-    title,
-    content: content.split('---')[2],
+  let res = {
+    authorName: content.split('---')[1].split('\n')[1].split(':')[1],
+    title: content.split('---')[1].split('\n')[2].split(':')[1] + `\n\n\n\n`,
     date: content.split('---')[1].split('\n')[3].split(':')[1],
     mdImage: `![](https:${content.split('---')[1].split('\n')[4].split(':')[2]})`,
-    imageUrl: `https:${content.split('---')[1].split('\n')[4].split(':')[2]}`
+    imageUrl: `https:${content.split('---')[1].split('\n')[4].split(':')[2]}`,
+    authorImage: content.split('---')[1].split('\n')[5].split(':')[2],
+    tags: content.split('---')[1].split('\n')[6].split(':')[1].split(','),
+    description: content.split('---')[1].split('\n')[7].split(':')[2],
+    content: content.split('---')[2],
   }
-}
+  console.log('res:', res)
 
-const handleFetchResponse = (data, targetFile) => {
-  if (data) {
-    const { title, date, content, image } = formatContent( data.files[`${targetFile}.md`].content )
-
-    return {
-      filename: targetFile,
-      title,
-      date,
-      content,
-      image
-    };
-  }
-}
-
-const translateTitleDate = (fileName) => {
-  let arr = fileName.split("__");
-  let title = arr[0].split("_").join(" ");
-  let date = arr[1]
-    .substr(0, arr[1].length - 3)
-    .split("_")
-    .join("/");
-
-  return { title: title, date: date };
+  return res;
 }
