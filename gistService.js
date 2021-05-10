@@ -7,15 +7,28 @@ export const getPosts = async (url, isLoadingCallback) => {
     Object.keys(data.files).map(item => console.log(item))
     
     const files = Object.keys(data.files).map(fileName => {
-      const {authorName, description, tags, authorImage, preview, title, content, date, imageUrl} = formatContent(data.files[fileName].content)
+      const {
+        authorName, 
+        description, 
+        tags, 
+        authorImage, 
+        preview, 
+        title, 
+        content, 
+        date, 
+        imageUrl, 
+        mdImage
+      } = formatContent(data.files[fileName].content)
+      
       return {
-        filename: `${fileName}`,
+        id: fileName,
         content,
         title,
         href: "#",
         tags: tags.map(tag => {return {name: tag, href: tag}}),
         description,
         imageUrl,
+        mdImage,
         datetime: date,
         date,
         readingTime: `${Math.max(1, Math.round(content.length / 200))} min` ,
@@ -24,7 +37,6 @@ export const getPosts = async (url, isLoadingCallback) => {
           href: '#',
           imageUrl: authorImage // add null option here
         },
-
       }
     })
 
@@ -39,8 +51,22 @@ export const getPosts = async (url, isLoadingCallback) => {
 
 };
 
+export const getPost = async (url, isLoadingCallback, id) => {
+  try {
+    let {posts} = await getPosts(url, isLoadingCallback);
+    console.log('id', id)
+    console.log('posts', posts)
+    return { post: posts.find(post => post.id === id)}
+  } catch (error) {
+    console.log('error in get post', error)
+    return {error}
+  } finally {
+    isLoadingCallback(false);
+  }
+}
+
 const formatContent = (content) => {
-  let res = {
+  return  {
     authorName: content.split('---')[1].split('\n')[1].split(':')[1],
     title: content.split('---')[1].split('\n')[2].split(':')[1] + `\n\n\n\n`,
     date: content.split('---')[1].split('\n')[3].split(':')[1],
@@ -51,7 +77,4 @@ const formatContent = (content) => {
     description: content.split('---')[1].split('\n')[7].split(':')[2],
     content: content.split('---')[2],
   }
-  console.log('res:', res)
-
-  return res;
 }

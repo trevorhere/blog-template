@@ -1,20 +1,28 @@
 import Head from 'next/head'
 import React, { useState, useEffect } from 'react';
 import {getPosts} from '../gistService'
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter();
   const [error, setError] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState([]);
   const url = `https://api.github.com/gists/68cc754fb298f3121b5b2b4cfaa754d4`
 
-useEffect(() => {
-  getPosts(url, setIsLoading)
+useEffect(async () => {
+  await getPosts(url, setIsLoading)
   .then(response => {
     setPosts(response.posts)
-    console.log('posts: ', posts)
+    console.log('posts: ', response.posts)
   });
 }, [])
+
+const handleClick = (e) => {
+  e.preventDefault()
+  router.push(href)
+}
+
 
 
   if(loading){
@@ -39,14 +47,15 @@ useEffect(() => {
         </div>
         <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
           {posts.map((post, i) => (
-            <div key={i} className="flex flex-col rounded-lg shadow-lg overflow-hidden">
+            <div onClick={() => router.push(`/post/${post.id}`)} key={post.id} 
+              className="flex flex-col rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
               <div className="flex-shrink-0">
                 <img className="h-48 w-full object-cover" src={post.imageUrl} alt="" />
               </div>
-              <div className="flex-1 bg-white p-6 flex flex-col justify-between">
+              <div className="flex-1 bg-white p-6 flex flex-col justify-between hover:bg-blue-50">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-indigo-600">
-                    {post.tags.length && post.tags.map((tag,i) => {
+                    {post?.tags?.length && post.tags.map((tag,i) => {
                       return (
                         <span>
                           <a href={tag.href} className="hover:underline">
@@ -63,7 +72,7 @@ useEffect(() => {
                 </div>
                 <div className="mt-6 flex items-center">
                   <div className="flex-shrink-0">
-                    <a href={post.author.href}>
+                    <a href={post?.author.href}>
                       <span className="sr-only">{post.author.name}</span>
                       <img className="h-10 w-10 rounded-full" src={post.author.imageUrl} alt="" />
                     </a>
