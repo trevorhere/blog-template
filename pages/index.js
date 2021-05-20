@@ -8,10 +8,11 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState([]);
-  const url = `https://api.github.com/gists/68cc754fb298f3121b5b2b4cfaa754d4`
-
+  const GIST_LIST_ID = '3797a38c4fb8b5a65f24aac2631eb3ed'
+  const url = `https://api.github.com/gists`
+  
 useEffect(async () => {
-  await getPosts(url, setIsLoading)
+  await getPosts(url, GIST_LIST_ID, setIsLoading)
   .then(response => {
     setPosts(response.posts)
     console.log('posts: ', response.posts)

@@ -1,44 +1,72 @@
-export const getPosts = async (url, isLoadingCallback) => {
-  isLoadingCallback(true);
-
+const getGistList = async(url) => {
   try {
     const res = await fetch(url);
     const data = await res.json();
-    Object.keys(data.files).map(item => console.log(item))
+    let fileKey = Object.keys(data.files)[0];
+    let list = JSON.parse(data.files[fileKey].content);
+    return list;
+
+  } catch (error) {
+    console.log(error)
+    return {error};
+  } 
+}
+
+export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
+  isLoadingCallback(true);
+  let files = [];
+
+  try {
     
-    const files = Object.keys(data.files).map(fileName => {
-      const {
-        authorName, 
-        description, 
-        tags, 
-        authorImage, 
-        preview, 
-        title, 
-        content, 
-        date, 
-        imageUrl, 
-        mdImage
-      } = formatContent(data.files[fileName].content)
-      
-      return {
-        id: fileName,
-        content,
-        title,
-        href: "#",
-        tags: tags.map(tag => {return {name: tag, href: tag}}),
-        description,
-        imageUrl,
-        mdImage,
-        datetime: date,
-        date,
-        readingTime: `${Math.max(1, Math.round(content.length / 200))} min` ,
-        author: {
-          name: authorName,
-          href: '#',
-          imageUrl: authorImage // add null option here
-        },
-      }
-    })
+    let list = await getGistList(`${base_url}/${gist_list_id}`);
+    files = [...await Promise.all(
+      list.map(async item => {
+        let file_res = await fetch(`${base_url}/${item.gist_id}`);
+        let file_data = await file_res.json();
+        return {file_data, gist_id: item.gist_id};
+      })
+      ).then(res => { 
+        return res.map(data => {
+
+          let fileKey = Object.keys(data.file_data.files)[0];
+          console.log('filekey:',fileKey)
+          let file_content = data.file_data.files[fileKey].content;
+        
+         const {
+          authorName, 
+          description, 
+          tags, 
+          authorImage, 
+          preview, 
+          title, 
+          content, 
+          date, 
+          imageUrl, 
+          mdImage
+        } = formatContent(file_content) 
+        
+        return {
+          id: data.gist_id,
+          content,
+          title,
+          href: "#",
+          tags: tags.map(tag => {return {name: tag, href: tag}}),
+          description,
+          imageUrl,
+          mdImage,
+          datetime: date,
+          date,
+          readingTime: `${Math.max(1, Math.round(content.length / 200))} min` ,
+          author: {
+            name: authorName,
+            href: '#',
+            imageUrl: authorImage // add null option here
+          },
+        }
+
+
+      });
+    })]
 
     files.sort((a,b) => { return new Date(b.date) - new Date(a.date) })
     return  {posts: files}
@@ -51,12 +79,52 @@ export const getPosts = async (url, isLoadingCallback) => {
 
 };
 
-export const getPost = async (url, isLoadingCallback, id) => {
+export const getPost = async (base_url, gist_id, isLoadingCallback) => {
   try {
-    let {posts} = await getPosts(url, isLoadingCallback);
-    console.log('id', id)
-    console.log('posts', posts)
-    return { post: posts.find(post => post.id === id)}
+
+
+    // store in context, if not present, pull
+    let res = await fetch(`${base_url}/${gist_id}`)
+    let data = await res.json()
+
+    console.log('data', data)
+    let fileKey = Object.keys(data.files)[0];
+    let file_content = data.files[fileKey].content;
+    
+    const {
+      authorName, 
+      description, 
+      tags, 
+      authorImage, 
+      preview, 
+      title, 
+      content, 
+      date, 
+      imageUrl, 
+      mdImage
+    } = formatContent(file_content) 
+    
+    let post =  {
+      id: data.gist_id,
+      content,
+      title,
+      href: "#",
+      tags: tags.map(tag => {return {name: tag, href: tag}}),
+      description,
+      imageUrl,
+      mdImage,
+      datetime: date,
+      date,
+      readingTime: `${Math.max(1, Math.round(content.length / 200))} min` ,
+      author: {
+        name: authorName,
+        href: '#',
+        imageUrl: authorImage // add null option here
+      },
+    }
+
+
+    return { post }
   } catch (error) {
     console.log('error in get post', error)
     return {error}
