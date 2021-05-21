@@ -11,21 +11,52 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const {GIST_LIST_ID} =  siteData
   const url = `https://api.github.com/gists`
-  const [selectedTags, selectTag] = useState([])
+  const [selectedTags, setSelectedTags] = useState([])
 
   useEffect(async () => {
     await getPosts(url, GIST_LIST_ID, setIsLoading)
     .then(response => {
-      setPosts(response.posts)
+      setPosts(response.posts.map(post => { return {...post, active: true}}))
     });
   }, [GIST_LIST_ID])
 
-  const selectNewTag = (tag) => {
-    console.log('sc', selectedTags)
-    if(!!selectedTags.find(st => st === tag)) return;
 
-    selectTag([...selectedTags, tag])
-    console.log('st ', selectedTags)
+  useEffect(() => {
+    if(!selectedTags.length) {
+      setPosts(posts.map(p => { 
+        p.active = true;
+        return p;
+      }));
+      return;
+    } 
+
+    let updatedPosts = 
+    posts.map(p => { 
+        p.active = false;
+        return p;
+    })
+    .map(p => {
+      let tagFound = false;
+      selectedTags.map(st => {
+         if(p.tags.find(tag => tag === st)) tagFound = true;
+      });
+
+      if(tagFound) p.active = true;
+      return p;
+    });
+
+    setPosts(updatedPosts)
+  }, [selectedTags])
+
+  const removeTag = (tag) => {
+     setSelectedTags(selectedTags.filter(ft => ft !== tag))
+  }
+
+  const selectNewTag = (tag, e) => {
+    e.stopPropagation();
+
+    if(!!selectedTags.find(st => st === tag)) return;
+    setSelectedTags([...selectedTags, tag]);
   }
 
   const handleClick = (e) => {
@@ -45,7 +76,7 @@ export default function Home() {
       <div className='flex justify-end mr-10 mt-5 text-blue-600 hover:underline'>
        <a href={siteData.home_site_url.link} >{siteData.home_site_url.name}</a>
       </div>
-    <div className="relative bg-gray-50 pt-16 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
+    <div className="relative pt-16 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
       <div className="absolute inset-0">
         <div className="bg-white h-1/3 sm:h-2/3" />
       </div>
@@ -59,20 +90,16 @@ export default function Home() {
           </p>
         </div>
         { !!selectedTags.length &&
-          <div className="flex justify-center my-5"> 
+          <div className="flex justify-center flex-wrap my-5"> 
           {selectedTags.map(tag => {
-            return <div className='px-1'>
+            return <div className='p-1'>
               <span className="inline-flex rounded-full items-center py-0.5 pl-2.5 pr-1 text-sm font-medium bg-indigo-100 text-indigo-700">
                  {tag} 
                 <button
                   type="button"
                   className="flex-shrink-0 ml-0.5 h-4 w-4 rounded-full inline-flex items-center justify-center text-indigo-400 hover:bg-indigo-200 hover:text-indigo-500 focus:outline-none focus:bg-indigo-500 focus:text-white"
-                  onClick={() => { 
-                    console.log('st', selectedTags)
-                    selectTag(selectedTags.filter(ft => ft !== tag))
-                    console.log('st', selectedTags)
-                    }
-                  }
+                  onClick={() => removeTag(tag)}
+                  tag
                 >
                 <span className="sr-only">Remove large option</span>
                 <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
@@ -85,10 +112,10 @@ export default function Home() {
          </div> 
         }
         <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
-          {posts.map((post, i) => (
+          {posts.filter(post => post.active).map((post, i) => (
             <div 
-              // onClick={() => router.push(`/post/${post.id}`)} key={post.id} 
-              className="flex flex-col rounded-lg shadow-lg overflow-hidden hover:shadow-xl">
+              onClick={() => router.push(`/post/${post.id}`)} key={post.id} 
+              className="flex flex-col rounded-lg shadow-lg overflow-hidden hover:shadow-xl z-0">
               <div className="flex-shrink-0">
                 <img className="h-48 w-full object-cover" src={post.imageUrl} alt="" />
               </div>
@@ -98,11 +125,7 @@ export default function Home() {
                     {post?.tags?.length && post.tags.map((tag,i) => {
                       return (
                         <span>
-                          <a onClick={() => { 
-                                selectNewTag(tag);
-                                console.log('atgs: ', selectedTags); 
-                              }
-                            }  className="hover:underline">
+                          <a onClick={(e) => selectNewTag(tag, e)}  className="z-10 hover:underline">
                             {` ${tag}`}
                           </a>{(i !== post.tags.length - 1) && ','}
                        </span>
