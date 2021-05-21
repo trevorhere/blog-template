@@ -32,7 +32,7 @@ export default function Post() {
             </h1>
             <p>
               {post.tags.map((tag,i) => {
-                return <>{`${tag.name.trim()} ${i !== post.tags.length - 1 ? ', ' : ''}`}</>
+                return <>{` ${tag.trim()} ${i !== post.tags.length - 1 ? ', ' : ''}`}</>
               })}
             </p>
           </div>
