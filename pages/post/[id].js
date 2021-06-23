@@ -7,7 +7,7 @@ import gfm from 'remark-gfm'
 export default function Post() {
   const router = useRouter()
   const {id} = router.query
-  const [post, setPost] = useState(test_post);
+  const [post, setPost] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const url = `https://api.github.com/gists`
   useEffect(async () => {
