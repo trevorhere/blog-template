@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {useRouter} from 'next/router'
 import {getPost} from '../../gistService'
 import ReactMarkdown from 'react-markdown'
-
+import gfm from 'remark-gfm'
 
 export default function Post() {
   const router = useRouter()
   const {id} = router.query
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState(test_post);
   const [loading, setIsLoading] = useState(false);
   const url = `https://api.github.com/gists`
   useEffect(async () => {
@@ -69,9 +69,7 @@ export default function Post() {
               layout="cover"
             />
           </div> 
-          <div className='markdown-body'>
-            <ReactMarkdown >{post.content}</ReactMarkdown>
-          </div>
+            <ReactMarkdown  remarkPlugins={[gfm]} children={post.content} />
       </div>
     </div>
     </div>

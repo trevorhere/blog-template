@@ -1,3 +1,18 @@
+
+export const postStoreService = () => {
+  let store = [];
+
+  const getStore = () => {
+    return store;
+  }
+
+  const setStore = (store) => {
+    store = [...store];
+    return store;
+  }
+
+}
+
 const getGistList = async(url) => {
   try {
     const res = await fetch(url);

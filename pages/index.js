@@ -14,10 +14,17 @@ export default function Home() {
   const [selectedTags, setSelectedTags] = useState([])
 
   useEffect(async () => {
-    await getPosts(url, GIST_LIST_ID, setIsLoading)
-    .then(response => {
-      setPosts(response.posts.map(post => { return {...post, active: true}}))
-    });
+
+    try {
+      await getPosts(url, GIST_LIST_ID, setIsLoading)
+      .then(response => {
+        if(!response?.posts) throw new Error('posts undefined', response)
+        setPosts(response.posts.map(post => { return {...post, active: true}}))
+      });
+
+    }catch(error){
+      console.log(error)
+    }
   }, [GIST_LIST_ID])
 
 
