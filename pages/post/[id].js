@@ -69,7 +69,7 @@ export default function Post() {
               layout="cover"
             />
           </div> 
-            <ReactMarkdown  remarkPlugins={[gfm]} children={post.content} />
+            <ReactMarkdown  className="markdown" remarkPlugins={[gfm]} children={post.content} />
       </div>
     </div>
     </div>
