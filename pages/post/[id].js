@@ -20,7 +20,18 @@ export default function Post() {
   
   if(post){
    return ( 
-     <div className="lg:w-1/2 md:w-3/4 sm:w-full mx-auto flex-initial">
+     <>
+    <button 
+      type="button" 
+      class="absolute top-5 right-10 items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      onClick={() => router.push('/')}
+     >
+       Home 
+    </button>
+    {/* <div>
+      <a className="absolute top-5 right-10 mt-2 text-blue-600 hover:underline" href="/">Home</a>
+    </div> */}
+    <div className="lg:w-1/2 md:w-3/4 sm:w-full mx-auto flex-initial">
     <div className="relative py-16 bg-white overflow-hidden">
       <div className="relative px-4 sm:px-6 lg:px-8">
         <div className="text-lg mx-auto flex flex-row justify-between">
@@ -35,9 +46,6 @@ export default function Post() {
                 return <>{` ${tag.trim()} ${i !== post.tags.length - 1 ? ', ' : ''}`}</>
               })}
             </p>
-          </div>
-          <div>
-            <a className="mt-2 text-blue-600 hover:underline" href="/">Home</a>
           </div>
         </div>
         <div className="mt-6 flex items-center">
@@ -73,6 +81,8 @@ export default function Post() {
       </div>
     </div>
     </div>
+
+     </>
    )
   } else {
   return (

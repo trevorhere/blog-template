@@ -75,14 +75,19 @@ export default function Home() {
    return (
      <>
      { loading ? <p>loading</p> :
-     <div >
+     <>
       <Head>
         <title>{siteData?.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className='flex justify-end mr-10 mt-5 text-blue-600 hover:underline'>
-       <a href={siteData.home_site_url.link} >{siteData.home_site_url.name}</a>
-      </div>
+    <button 
+      type="button" 
+      class="z-20 mt-5 absolute top-5 right-10 items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      onClick={() => router.push(siteData.home_site_url.link)}
+     >
+       {siteData.home_site_url.name} 
+    </button>
+
     <div className="relative pt-16 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
       <div className="absolute inset-0">
         <div className="bg-white h-1/3 sm:h-2/3" />
@@ -170,7 +175,7 @@ export default function Home() {
         </div>
       </div>
     </div>
-    </div>
+    </>
    }
   </>
   )
