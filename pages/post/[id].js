@@ -3,13 +3,17 @@ import {useRouter} from 'next/router'
 import {getPost} from '../../gistService'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
+import siteData from '../../site-data' 
+import {FaPencilAlt} from 'react-icons/fa'
 
 export default function Post() {
   const router = useRouter()
+  const {GITHUB_USERNAME} =  siteData
   const {id} = router.query
   const [post, setPost] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const url = `https://api.github.com/gists`
+
   useEffect(async () => {
     await getPost(url, id, setIsLoading)
     .then(response => {
@@ -46,6 +50,13 @@ export default function Post() {
                 return <>{` ${tag.trim()} ${i !== post.tags.length - 1 ? ', ' : ''}`}</>
               })}
             </p>
+          </div>
+          <div>
+            <button 
+              type="button"
+              class="absolute top-5 right-10 items-center px-2.5 py-1.5 border-2 border-black text-xs font-medium rounded  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={() => router.push(`https://gist.github.com/${GITHUB_USERNAME}/${id}`)}
+            >   <FaPencilAlt className="mx-2 mr-2 h-5 w-5" aria-hidden="true" /></button>
           </div>
         </div>
         <div className="mt-6 flex items-center">

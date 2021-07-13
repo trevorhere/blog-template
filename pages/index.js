@@ -9,7 +9,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState([]);
-  const {GIST_LIST_ID} =  siteData
+  const {GIST_LIST_ID, GITHUB_USERNAME} =  siteData
   const url = `https://api.github.com/gists`
   const [selectedTags, setSelectedTags] = useState([])
 
