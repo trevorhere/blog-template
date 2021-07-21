@@ -19,7 +19,7 @@ export default function Post() {
     .then(response => {
       setPost(response.post)
     });
-  }, [id])
+  }, [id, post])
 
   
   if(post){
