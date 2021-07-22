@@ -15,7 +15,7 @@ export default function Post() {
   const url = `https://api.github.com/gists`
 
   useEffect(async () => {
-    await getPost(url, id, setIsLoading)
+    !!id && await getPost(url, id, setIsLoading)
     .then(response => {
       console.log('res: ', response)
       !!response && setPost(response.post)
