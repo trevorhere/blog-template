@@ -96,13 +96,11 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
 
 export const getPost = async (base_url, gist_id, isLoadingCallback) => {
   try {
-
-
     // store in context, if not present, pull
     let res = await fetch(`${base_url}/${gist_id}`)
     let data = await res.json()
 
-    console.log('data', data)
+    console.log('getPosts data', data)
     let fileKey = Object.keys(data.files)[0];
     let file_content = data.files[fileKey].content;
     
