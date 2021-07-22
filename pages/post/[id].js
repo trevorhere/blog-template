@@ -27,7 +27,7 @@ export default function Post() {
     <>
     <button 
       type="button" 
-      class="absolute top-5 right-10 items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      class="absolute top-10 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       onClick={() => router.push('/')}
      >
        Home 
@@ -50,13 +50,6 @@ export default function Post() {
                 return <span key={1}>{`${tag.trim()}${i !== post.tags.length - 1 ? ', ' : ''}`}</span>
               })}
             </p>
-          </div>
-          <div>
-            <button 
-              type="button"
-              class="absolute top-5 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              onClick={() => router.push(`https://gist.github.com/${GITHUB_USERNAME}/${id}`)}
-            >   <FaPencilAlt className="mx-2 mr-2 h-3 w-3" aria-hidden="true" /></button>
           </div>
         </div>
         <div className="mt-6 flex items-center">
@@ -91,7 +84,16 @@ export default function Post() {
             <ReactMarkdown  className="markdown" remarkPlugins={[gfm]} children={post.content} />
       </div>
     </div>
+
     </div>
+    <div>
+      <button 
+        type="button"
+        class="fixed bottom-5 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        onClick={() => router.push(`https://gist.github.com/${GITHUB_USERNAME}/${id}`)}
+      >   <FaPencilAlt className="mx-2 mr-2 h-3 w-3" aria-hidden="true" /></button>
+    </div>
+
     </>
   )
 }
