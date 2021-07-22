@@ -96,6 +96,7 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
 
 export const getPost = async (base_url, gist_id, isLoadingCallback) => {
   try {
+    console.log('base_url: ', base_url, 'gist_id: ', gist_id);
     // store in context, if not present, pull
     let res = await fetch(`${base_url}/${gist_id}`)
     let data = await res.json()

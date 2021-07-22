@@ -17,7 +17,8 @@ export default function Post() {
   useEffect(async () => {
     await getPost(url, id, setIsLoading)
     .then(response => {
-      setPost(response.post)
+      console.log('res: ', response)
+      !!response && setPost(response.post)
     });
   }, [id])
 
