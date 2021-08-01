@@ -132,7 +132,8 @@ export default function Home() {
               className="flex flex-col rounded-lg shadow-lg overflow-hidden hover:shadow-xl z-0">
               <div className="flex-shrink-0">
                 <Image 
-                  className="h-48 w-full object-cover" 
+                  className="h-48 w-full object-cover"
+                  placeholder="blur" 
                   src={post.imageUrl} 
                   alt="post-cover-pic" 
                   layout="responsive"
