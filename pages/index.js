@@ -2,7 +2,9 @@ import Head from 'next/head'
 import React, { useState, useEffect } from 'react';
 import {getPosts} from '../gistService'
 import {useRouter} from 'next/router'
-import siteData from '../site-data' 
+import siteData from '../site-data'
+import Loader from '../components/loader'
+import Image from 'next/image'
 
 export default function Home() {
   const router = useRouter();
@@ -74,15 +76,16 @@ export default function Home() {
 
    return (
      <>
-     { loading ? <p>loading</p> :
-     <>
+     { loading 
+       ? <Loader/> 
+       : <>
       <Head>
         <title>{siteData?.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
     <button 
       type="button" 
-      class="z-20 mt-5 absolute top-5 right-10 items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      class="z-20 mt-5 absolute top-5 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-500"
       onClick={() => router.push(siteData.home_site_url.link)}
      >
        {siteData.home_site_url.name} 
@@ -113,7 +116,6 @@ export default function Home() {
                   onClick={() => removeTag(tag)}
                   tag
                 >
-                <span className="sr-only">Remove large option</span>
                 <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
                   <path strokeLinecap="round" strokeWidth="1.5" d="M1 1l6 6m0-6L1 7" />
                 </svg>
@@ -129,7 +131,14 @@ export default function Home() {
               onClick={() => router.push(`/post/${post.id}`)} key={post.id} 
               className="flex flex-col rounded-lg shadow-lg overflow-hidden hover:shadow-xl z-0">
               <div className="flex-shrink-0">
-                <img className="h-48 w-full object-cover" src={post.imageUrl} alt="" />
+                <Image 
+                  className="h-48 w-full object-cover" 
+                  src={post.imageUrl} 
+                  alt="post-cover-pic" 
+                  layout="responsive"
+                  width={500}
+                  height={250}
+                />
               </div>
               <div className="flex-1 bg-white p-6 flex flex-col justify-between hover:bg-blue-50">
                 <div className="flex-1">

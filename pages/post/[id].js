@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
 import siteData from '../../site-data' 
 import {FaPencilAlt} from 'react-icons/fa'
+import Loader from '../../components/loader'
 
 export default function Post() {
   const router = useRouter()
@@ -23,15 +24,17 @@ export default function Post() {
   }, [id])
 
   
-  if(!post) return <div>Loading...</div>
-  return ( 
-    <>
+   return ( <> { 
+    !post 
+       ? <Loader/> 
+       : <>
+
     <button 
       type="button" 
-      class="absolute top-10 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      className="absolute top-10 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-500"
       onClick={() => router.push('/')}
      >
-       Home 
+       Back 
     </button>
     {/* <div>
       <a className="absolute top-5 right-10 mt-2 text-blue-600 hover:underline" href="/">Home</a>
@@ -94,7 +97,8 @@ export default function Post() {
         onClick={() => router.push(`https://gist.github.com/${GITHUB_USERNAME}/${id}`)}
       >   <FaPencilAlt className="mx-2 mr-2 h-3 w-3" aria-hidden="true" /></button>
     </div>
-
     </>
+    }
+  </>
   )
 }
