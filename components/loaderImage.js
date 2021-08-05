@@ -20,13 +20,14 @@ export default function LoaderImage({imageUrl}){
     />
     <Image 
       className={`h-48 w-full object-cover`}
+      style={{display: !loaded?'block':'hidden'}}
       src={imageUrl} 
       alt="post-cover-pic" 
       layout="responsive"
       width={500}
       height={250}
       priority={true}
-      onLoadingComplete={() => setTimeout(setLoaded(true), 1500)}
+      onLoadingComplete={() => setLoaded(true)}
     />
   </>)
 }
