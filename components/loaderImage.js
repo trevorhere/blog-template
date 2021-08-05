@@ -25,6 +25,7 @@ export default function LoaderImage({imageUrl}){
       layout="responsive"
       width={500}
       height={250}
+      priority={true}
       onLoadingComplete={() => setTimeout(setLoaded(true), 1500)}
     />
   </>)
