@@ -1,4 +1,5 @@
 
+
 export const postStoreService = () => {
   let store = [];
 
@@ -12,6 +13,9 @@ export const postStoreService = () => {
   }
 
 }
+
+
+
 
 const getGistList = async(url) => {
   try {
@@ -44,7 +48,6 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
         return res.map(data => {
 
           let fileKey = Object.keys(data.file_data.files)[0];
-          console.log('filekey:',fileKey)
           let file_content = data.file_data.files[fileKey].content;
         
          const {
@@ -56,7 +59,8 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
           title, 
           content, 
           date, 
-          imageUrl, 
+          imageUrl,
+          placeHolderImage,
           mdImage
         } = formatContent(file_content) 
         
@@ -69,7 +73,9 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
           description,
           imageUrl,
           mdImage,
+          placeHolderImage,
           datetime: date,
+          loadingImage: true,
           date,
           readingTime: `${Math.max(1, Math.round(content.length / 200))} min` ,
           author: {
@@ -114,6 +120,7 @@ export const getPost = async (base_url, gist_id, isLoadingCallback) => {
       title, 
       content, 
       date, 
+      placeHolderImage,
       imageUrl, 
       mdImage
     } = formatContent(file_content) 
@@ -129,6 +136,7 @@ export const getPost = async (base_url, gist_id, isLoadingCallback) => {
       mdImage,
       datetime: date,
       date,
+      placeHolderImage,
       readingTime: `${Math.max(1, Math.round(content.length / 200))} min` ,
       author: {
         name: authorName,
@@ -156,7 +164,8 @@ const formatContent = (content) => {
     imageUrl: `https:${content.split('---')[1].split('\n')[4].split(':')[2]}`,
     authorImage: content.split('---')[1].split('\n')[5].split(':')[2],
     tags: content.split('---')[1].split('\n')[6].split(':')[1].split(','),
-    description: content.split('---')[1].split('\n')[7].split(':')[2],
+    placeHolderImage:`https:${content.split('---')[1].split('\n')[7].split(':')[2]}`,
+    description: content.split('---')[1].split('\n')[8].split(':')[2],
     content: content.split('---')[2],
   }
 }
