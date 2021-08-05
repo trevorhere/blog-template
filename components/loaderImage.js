@@ -8,7 +8,7 @@ export default function LoaderImage({imageUrl}){
 
   return (
     <>
-    { loaded
+    { !loaded
       ?<Blurhash
         className='h-48 w-full object-cover'
         hash="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
