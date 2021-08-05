@@ -11,7 +11,6 @@ export default function LoaderImage({imageUrl}){
     { loaded
       ?<Blurhash
         className='h-48 w-full object-cover'
-        style={{display:loaded?'none':''}}
         hash="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
         width={500}
         height={250}
@@ -21,7 +20,6 @@ export default function LoaderImage({imageUrl}){
       />
       : <Image 
         className={`h-48 w-full object-cover`}
-        style={{display: !loaded?'block':'hidden'}}
         src={imageUrl} 
         layout="responsive"
         width={500}
