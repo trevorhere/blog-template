@@ -155,7 +155,7 @@ const formatContent = (content) => {
     imageUrl: `https:${content.split('---')[1].split('\n')[4].split(':')[2]}`,
     authorImage: content.split('---')[1].split('\n')[5].split(':')[2],
     tags: content.split('---')[1].split('\n')[6].split(':')[1].split(','),
-    description: content.split('---')[1].split('\n')[8].split(':')[2],
+    description: content.split('---')[1].split('\n')[7].split(':')[2],
     content: content.split('---')[2],
   }
 }
