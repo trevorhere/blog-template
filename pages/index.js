@@ -4,11 +4,7 @@ import {getPosts} from '../gistService'
 import {useRouter} from 'next/router'
 import siteData from '../site-data'
 import Loader from '../components/loader'
-import Image from 'next/image'
-import { Blurhash } from "react-blurhash";
 import LoaderImage from '../components/loaderImage'
-
-
 
 export default function Home() {
   const router = useRouter();

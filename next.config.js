@@ -1,7 +1,5 @@
-const { withPlaiceholder } = require("@plaiceholder/next");
-
-module.exports = withPlaiceholder({
+module.exports = {
   images: {
     domains: ['i.imgur.com'],
   },
-});
+}
