@@ -4,7 +4,7 @@ import {getPosts} from '../gistService'
 import {useRouter} from 'next/router'
 import siteData from '../site-data'
 import Loader from '../components/loader'
-import Image from 'next/image'
+import LoaderImage from '../components/loaderImage'
 
 export default function Home() {
   const router = useRouter();
@@ -15,11 +15,12 @@ export default function Home() {
   const url = `https://api.github.com/gists`
   const [selectedTags, setSelectedTags] = useState([])
 
-  useEffect(async () => {
 
+  useEffect(async () => {
     try {
       await getPosts(url, GIST_LIST_ID, setIsLoading)
       .then(response => {
+        console.log({response})
         if(!response?.posts) throw new Error('posts undefined', response)
         setPosts(response.posts.map(post => { return {...post, active: true}}))
       });
@@ -85,7 +86,7 @@ export default function Home() {
       </Head>
     <button 
       type="button" 
-      class="z-20 mt-5 absolute top-5 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-500"
+      className="z-20 mt-5 absolute top-5 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-500"
       onClick={() => router.push(siteData.home_site_url.link)}
      >
        {siteData.home_site_url.name} 
@@ -131,15 +132,7 @@ export default function Home() {
               onClick={() => router.push(`/post/${post.id}`)} key={post.id} 
               className="flex flex-col rounded-lg shadow-lg overflow-hidden hover:shadow-xl z-0">
               <div className="flex-shrink-0">
-                <Image 
-                  className="h-48 w-full object-cover"
-                  placeholder="blur" 
-                  src={post.imageUrl} 
-                  alt="post-cover-pic" 
-                  layout="responsive"
-                  width={500}
-                  height={250}
-                />
+                <LoaderImage  imageUrl={post.imageUrl}></LoaderImage>
               </div>
               <div className="flex-1 bg-white p-6 flex flex-col justify-between hover:bg-blue-50">
                 <div className="flex-1">

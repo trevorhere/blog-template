@@ -1,4 +1,5 @@
 
+
 export const postStoreService = () => {
   let store = [];
 
@@ -12,6 +13,7 @@ export const postStoreService = () => {
   }
 
 }
+
 
 const getGistList = async(url) => {
   try {
@@ -44,7 +46,6 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
         return res.map(data => {
 
           let fileKey = Object.keys(data.file_data.files)[0];
-          console.log('filekey:',fileKey)
           let file_content = data.file_data.files[fileKey].content;
         
          const {
@@ -56,7 +57,7 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
           title, 
           content, 
           date, 
-          imageUrl, 
+          imageUrl,
           mdImage
         } = formatContent(file_content) 
         
@@ -96,12 +97,10 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
 
 export const getPost = async (base_url, gist_id, isLoadingCallback) => {
   try {
-    console.log('base_url: ', base_url, 'gist_id: ', gist_id);
     // store in context, if not present, pull
     let res = await fetch(`${base_url}/${gist_id}`)
     let data = await res.json()
 
-    console.log('getPosts data', data)
     let fileKey = Object.keys(data.files)[0];
     let file_content = data.files[fileKey].content;
     
