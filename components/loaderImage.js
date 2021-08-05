@@ -8,24 +8,25 @@ export default function LoaderImage({imageUrl}){
 
   return (
     <>
-    { !loaded
-      ?<Blurhash
-        className='h-48 w-full object-cover'
-        hash="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
-        width={500}
-        height={250}
-        resolutionX={32}
-        resolutionY={32}
-        punch={1}
-      />
-      : <Image 
-        className={`h-48 w-full object-cover`}
-        src={imageUrl} 
-        layout="responsive"
-        width={500}
-        height={250}
-        priority={true}
-        onLoadingComplete={() => setLoaded(true)}
-      />}
+    <Blurhash
+      className='h-48 w-full object-cover'
+      style={{display:loaded?'none':''}}
+      hash="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
+      width={500}
+      height={250}
+      resolutionX={32}
+      resolutionY={32}
+      punch={1}
+    />
+    <Image 
+      className={`h-48 w-full object-cover`}
+      style={{display: !loaded?'block':'hidden'}}
+      src={imageUrl} 
+      layout="responsive"
+      width={500}
+      height={loaded ? 250 : 0}
+      priority={true}
+      onLoadingComplete={() => setLoaded(true)}
+    />
   </>)
 }
