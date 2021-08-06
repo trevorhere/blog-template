@@ -14,8 +14,6 @@ export const getStaticProps = async () => {
   const res = await fetch(`${url}/${GIST_LIST_ID}`);
   const data = await res.json()
   let gistList = gistService.formatGistListResponse(data);
-  // return await getPosts(url, GIST_LIST_ID, () => {}).then(posts => {
-  //   console.log({posts});
  let files = [...await Promise.all(
     gistList?.map(async item => {
       let file_res = await fetch(`${url}/${item.gist_id}`);
