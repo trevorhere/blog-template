@@ -20,6 +20,7 @@ export const getStaticProps = async () => {
       let file_data = await file_res.json();
       return {file_data, gist_id: item.gist_id};
     })
+    
   )]
  
 
