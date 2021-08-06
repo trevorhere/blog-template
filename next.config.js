@@ -3,6 +3,10 @@ module.exports = {
     domains: ['i.imgur.com'],
   },
   webpack: (config) => {
-    return {...config, externals:{sharp: 'commonjs sharp'}}
-  },
+    config.externals.push({
+      sharp: "commonjs sharp",
+    });
+
+    return config;
+  }
 }
