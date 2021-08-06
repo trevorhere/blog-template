@@ -166,7 +166,7 @@ export default function Home({init_posts}) {
                   <p className="text-sm font-medium text-indigo-600">
                     {post?.tags?.length && post.tags.map((tag,i) => {
                       return (
-                        <span>
+                        <span key={i}>
                           <a onClick={(e) => selectNewTag(tag, e)}  className="z-10 hover:underline">
                             {` ${tag}`}
                           </a>{(i !== post.tags.length - 1) && ','}
