@@ -3,15 +3,25 @@ import React, { useState, useEffect } from 'react';
 import { Blurhash } from "react-blurhash";
 import Image from 'next/image'
 
-export default function LoaderImage({imageUrl}){
+export const getStaticProps = async (test) => {  
+  console.log('props', props)
+  // const {css,img} = await getPlaiceholder("/path-to-your-image.jpg");
+  return {
+    props: {
+      test
+      // css,
+   },
+  };};
+
+  export default function LoaderImage({imageUrl, blurhash}){
+    console.log('test: ', test);
   const [loaded, setLoaded] = useState(false);
 
   return (
     <>
     <Blurhash
       className='h-48 w-full object-cover'
-      style={{display:loaded?'none':''}}
-      hash="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
+      hash={blurhash}
       width={500}
       height={250}
       resolutionX={32}

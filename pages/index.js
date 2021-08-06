@@ -1,35 +1,53 @@
 import Head from 'next/head'
+import Image from 'next/image'
 import React, { useState, useEffect } from 'react';
-import {getPosts} from '../gistService'
+import * as gistService  from '../gistService'
 import {useRouter} from 'next/router'
 import siteData from '../site-data'
 import Loader from '../components/loader'
+import { getPlaiceholder } from "plaiceholder";
 import LoaderImage from '../components/loaderImage'
+const url = `https://api.github.com/gists`
+const {GIST_LIST_ID, GITHUB_USERNAME} =  siteData
 
-export default function Home() {
+export const getStaticProps = async () => {
+  const res = await fetch(`${url}/${GIST_LIST_ID}`);
+  const data = await res.json()
+  let gistList = gistService.formatGistListResponse(data);
+  // return await getPosts(url, GIST_LIST_ID, () => {}).then(posts => {
+  //   console.log({posts});
+ let files = [...await Promise.all(
+    gistList?.map(async item => {
+      let file_res = await fetch(`${url}/${item.gist_id}`);
+      let file_data = await file_res.json();
+      return {file_data, gist_id: item.gist_id};
+    })
+  )]
+ 
+
+  const raw_posts = gistService.formatPostData(files)
+  let posts = [...await Promise.all(
+    raw_posts?.map(async post => {
+      let blur = await getPlaiceholder(post.imageUrl);
+      console.log({blur})
+      return {...post, blurhash: blur.base64};
+    })
+  )] 
+
+
+  return {
+      props: {
+        init_posts: posts.map(post => { return {...post, active:true}})
+      }
+    }
+}
+
+export default function Home({init_posts}) {
   const router = useRouter();
   const [error, setError] = useState(null);
   const [loading, setIsLoading] = useState(false);
-  const [posts, setPosts] = useState([]);
-  const {GIST_LIST_ID, GITHUB_USERNAME} =  siteData
-  const url = `https://api.github.com/gists`
+  const [posts, setPosts] = useState(init_posts);
   const [selectedTags, setSelectedTags] = useState([])
-
-
-  useEffect(async () => {
-    try {
-      await getPosts(url, GIST_LIST_ID, setIsLoading)
-      .then(response => {
-        console.log({response})
-        if(!response?.posts) throw new Error('posts undefined', response)
-        setPosts(response.posts.map(post => { return {...post, active: true}}))
-      });
-
-    }catch(error){
-      console.log(error)
-    }
-  }, [GIST_LIST_ID])
-
 
   useEffect(() => {
     if(!selectedTags.length) {
@@ -129,10 +147,21 @@ export default function Home() {
         <div className="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
           {posts.filter(post => post.active).map((post, i) => (
             <div 
+              key={i}
               onClick={() => router.push(`/post/${post.id}`)} key={post.id} 
               className="flex flex-col rounded-lg shadow-lg overflow-hidden hover:shadow-xl z-0">
               <div className="flex-shrink-0">
-                <LoaderImage  imageUrl={post.imageUrl}></LoaderImage>
+                <Image 
+                    className={`h-48 w-full object-cover`}
+                    placeholder="blur" 
+                    blurDataURL={post.blurhash}
+                    src={post.imageUrl} 
+                    layout="responsive"
+                    width={500}
+                    height={250}
+                    priority={true}
+                ></Image>
+                {/* <LoaderImage imageUrl={post.imageUrl} blurhash={post.blurhash.hash}></LoaderImage> */}
               </div>
               <div className="flex-1 bg-white p-6 flex flex-col justify-between hover:bg-blue-50">
                 <div className="flex-1">

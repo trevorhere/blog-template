@@ -14,6 +14,17 @@ export const postStoreService = () => {
 
 }
 
+export const formatGistListResponse = (data) => {
+  try {
+    let fileKey = Object.keys(data.files)[0];
+    let list = JSON.parse(data.files[fileKey].content);
+    return list;
+
+  } catch (error) {
+    console.log(error)
+    return {error};
+  } 
+}
 
 const getGistList = async(url) => {
   try {
@@ -29,6 +40,47 @@ const getGistList = async(url) => {
   } 
 }
 
+export const formatPostData = (input) => {
+  return input.map(data => {
+
+    let fileKey = Object.keys(data.file_data.files)[0];
+    let file_content = data.file_data.files[fileKey].content;
+  
+   const {
+    authorName, 
+    tags, 
+    authorImage, 
+    preview, 
+    title, 
+    content, 
+    date, 
+    imageUrl,
+    mdImage
+  } = formatContent(file_content) 
+  
+  return {
+    id: data.gist_id,
+    content,
+    title,
+    href: "#",
+    tags: tags.map(tag => tag.trim()),
+    imageUrl,
+    mdImage,
+    datetime: date,
+    date,
+    readingTime: `${Math.max(1, Math.round(content.length / 200))} min` ,
+    author: {
+      name: authorName,
+      href: '#',
+      imageUrl: authorImage // add null option here
+    },
+  }
+
+
+}); 
+}
+
+// export const makePostCalls() => {}
 export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
   isLoadingCallback(true);
   let files = [];
@@ -50,7 +102,6 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
         
          const {
           authorName, 
-          description, 
           tags, 
           authorImage, 
           preview, 
@@ -67,7 +118,6 @@ export const getPosts = async (base_url, gist_list_id, isLoadingCallback) => {
           title,
           href: "#",
           tags: tags.map(tag => tag.trim()),
-          description,
           imageUrl,
           mdImage,
           datetime: date,
@@ -106,7 +156,6 @@ export const getPost = async (base_url, gist_id, isLoadingCallback) => {
     
     const {
       authorName, 
-      description, 
       tags, 
       authorImage, 
       preview, 
@@ -123,7 +172,6 @@ export const getPost = async (base_url, gist_id, isLoadingCallback) => {
       title,
       href: "#",
       tags: tags.map(tag => tag.trim()),
-      description,
       imageUrl,
       mdImage,
       datetime: date,
@@ -155,7 +203,7 @@ const formatContent = (content) => {
     imageUrl: `https:${content.split('---')[1].split('\n')[4].split(':')[2]}`,
     authorImage: content.split('---')[1].split('\n')[5].split(':')[2],
     tags: content.split('---')[1].split('\n')[6].split(':')[1].split(','),
-    description: content.split('---')[1].split('\n')[7].split(':')[2],
+    description: content.split('---')[1].split('\n')[7].split(':')[2] || "",
     content: content.split('---')[2],
   }
 }
