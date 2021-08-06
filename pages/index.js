@@ -20,7 +20,7 @@ export const getStaticProps = async () => {
       let file_data = await file_res.json();
       return {file_data, gist_id: item.gist_id};
     })
-    
+
   )]
  
 
@@ -28,7 +28,6 @@ export const getStaticProps = async () => {
   let posts = [...await Promise.all(
     raw_posts?.map(async post => {
       let blur = await getPlaiceholder(post.imageUrl);
-      console.log({blur})
       return {...post, blurhash: blur.base64};
     })
   )] 
