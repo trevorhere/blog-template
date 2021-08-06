@@ -1,4 +1,5 @@
 module.exports = {
+  target: "serverless",
   images: {
     domains: ['i.imgur.com'],
   },
