@@ -5,6 +5,7 @@ import {useRouter} from 'next/router'
 import siteData from '../site-data'
 import Loader from '../components/loader'
 import LoaderImage from '../components/loaderImage'
+import {FaHome} from 'react-icons/fa'
 
 export default function Home() {
   const router = useRouter();
@@ -84,13 +85,35 @@ export default function Home() {
         <title>{siteData?.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-    <button 
-      type="button" 
-      className="z-20 mt-5 absolute top-5 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-500"
-      onClick={() => router.push(siteData.home_site_url.link)}
-     >
-       {siteData.home_site_url.name} 
-    </button>
+      <button 
+        type="button" 
+        className="
+          z-20 
+          absolute 
+          top-5 
+          right-5
+          items-center 
+          p-1 
+          border-2 
+          border-black 
+          text-xs
+          font-medium
+          rounded 
+          hover:bg-gray-200
+          focus:outline-none
+          focus:ring-2
+          focus:ring-offset-2
+          focus:ring-black-500"
+        onClick={() => router.push(siteData.home_site_url.link)}
+      >
+        <span className={`sm:hidden`}>
+          <FaHome className="mx-2 mr-2 h-3 w-3"  />
+        </span>
+        <span className={`hidden sm:flex`}>
+          {siteData.home_site_url.name} 
+        </span>
+
+      </button>
 
     <div className="relative pt-16 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
       <div className="absolute inset-0">
