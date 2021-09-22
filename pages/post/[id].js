@@ -95,7 +95,8 @@ export default function Post() {
         type="button"
         class="fixed bottom-5 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         onClick={() => router.push(`https://gist.github.com/${GITHUB_USERNAME}/${id}`)}
-      >   <FaPencilAlt className="mx-2 mr-2 h-3 w-3" aria-hidden="true" /></button>
+      >
+        <FaPencilAlt className="mx-2 mr-2 h-3 w-3" aria-hidden="true" /></button>
     </div>
     </>
     }

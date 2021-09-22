@@ -25,8 +25,7 @@ export default function Home() {
         if(!response?.posts) throw new Error('posts undefined', response)
         setPosts(response.posts.map(post => { return {...post, active: true}}))
       });
-
-    }catch(error){
+    } catch(error){
       console.log(error)
     }
   }, [GIST_LIST_ID])
@@ -69,12 +68,6 @@ export default function Home() {
     if(!!selectedTags.find(st => st === tag)) return;
     setSelectedTags([...selectedTags, tag]);
   }
-
-  const handleClick = (e) => {
-    e.preventDefault()
-    router.push(href)
-  }
-
 
    return (
      <>
