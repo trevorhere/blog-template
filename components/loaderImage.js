@@ -1,7 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
-import { Blurhash } from "react-blurhash";
+import React, { useState, useEffect } from 'react'
+import { Blurhash } from "react-blurhash"
 import Image from 'next/image'
+import hashes from '../blur-hashes'
 
 export default function LoaderImage({imageUrl}){
   const [loaded, setLoaded] = useState(false);
@@ -11,7 +12,7 @@ export default function LoaderImage({imageUrl}){
     <Blurhash
       className='h-48 w-full object-cover'
       style={{display:loaded?'none':''}}
-      hash="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
+      hash={hashes[Math.floor(Math.random() * 29)]}
       width={500}
       height={250}
       resolutionX={32}
