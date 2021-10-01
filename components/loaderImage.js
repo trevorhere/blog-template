@@ -14,7 +14,7 @@ export default function LoaderImage({imageUrl}){
       style={{display:loaded?'none':''}}
       hash={hashes[Math.floor(Math.random() * 29)]}
       width={500}
-      height={250}
+      height={205}
       resolutionX={32}
       resolutionY={32}
       punch={1}

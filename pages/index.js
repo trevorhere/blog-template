@@ -21,7 +21,6 @@ export default function Home() {
     try {
       await getPosts(url, GIST_LIST_ID, setIsLoading)
       .then(response => {
-        console.log({response})
         if(!response?.posts) throw new Error('posts undefined', response)
         setPosts(response.posts.map(post => { return {...post, active: true}}))
       });
