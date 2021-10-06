@@ -84,6 +84,7 @@ export default function Home() {
         <title>{siteData?.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      { siteData.useCTA ? (
       <button 
         type="button" 
         className="
@@ -111,8 +112,7 @@ export default function Home() {
         <span className={`hidden sm:flex`}>
           {siteData.home_site_url.name} 
         </span>
-
-      </button>
+      </button> ) : null}
 
     <div className="relative pt-16 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
       <div className="absolute inset-0">
