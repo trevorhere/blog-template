@@ -4,24 +4,30 @@ import {getPost} from '../../gistService'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
 import siteData from '../../site-data' 
-import {FaPencilAlt} from 'react-icons/fa'
+import {FaPencilAlt, FaFacebook, FaLinkedin, FaTwitter, FaCopy, FaKickstarter  } from 'react-icons/fa'
 import Loader from '../../components/loader'
+
 
 export default function Post() {
   const router = useRouter()
-  const {GITHUB_USERNAME} =  siteData
+  const {GITHUB_USERNAME, baseUrl, showSocialShareLinks} = siteData
   const {id} = router.query
   const [post, setPost] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const url = `https://api.github.com/gists`
 
+  const linkedInShareLink = `https://www.linkedin.com/shareArticle?mini=true&url=${baseUrl}${router.asPath}&title=This%20blew%20my%20mind%3A&summary=&source=`
+  const twitterShareLink = `https://twitter.com/intent/tweet?text=${baseUrl}${router.asPath}`
+  const fbShareLink = `https://www.facebook.com/sharer/sharer.php?u=${baseUrl}${router.asPath}`
+  const copyLink = `${baseUrl}${router.asPath}`
+
   useEffect(async () => {
     !!id && await getPost(url, id, setIsLoading)
     .then(response => {
-      console.log('res: ', response)
       !!response && setPost(response.post)
     });
   }, [id])
+
 
   
    return ( <> { 
@@ -56,25 +62,46 @@ export default function Post() {
             </p>
           </div>
         </div>
-        <div className="mt-6 flex items-center">
-          <div className="flex-shrink-0">
-            <a href={post.author.href}>
-              <span className="sr-only">{post.author.name}</span>
-              <img className="h-10 w-10 rounded-full" src={post.author.imageUrl} alt="" />
-            </a>
-          </div>
-          <div className="ml-3">
-            <p className="text-sm font-medium text-gray-900">
-              <a href={post.author.href} className="hover:underline">
-                {post.author.name}
+        <div className="flex flex-row justify-between">
+          <div className="mt-6 flex items-center">
+            <div className="flex-shrink-0">
+              <a href={post.author.href}>
+                <span className="sr-only">{post.author.name}</span>
+                <img className="h-10 w-10 rounded-full" src={post.author.imageUrl} alt="" />
               </a>
-            </p>
-            <div className="flex space-x-1 text-sm text-gray-500">
-              <time dateTime={post.datetime}>{post.date}</time>
-              <span aria-hidden="true">&middot;</span>
-              <span>{post.readingTime} read</span>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-gray-900">
+                <a href={post.author.href} className="hover:underline">
+                  {post.author.name}
+                </a>
+              </p>
+              <div className="flex space-x-1 text-sm text-gray-500">
+                <time dateTime={post.datetime}>{post.date}</time>
+                <span aria-hidden="true">&middot;</span>
+                <span>{post.readingTime} read</span>
+              </div>
             </div>
           </div>
+          {showSocialShareLinks 
+          ? <div className="flex flex-column items-center mt-10 text-gray-500 cursor-pointer">
+              {[
+                {icon: FaTwitter, action: twitterShareLink, link: true },
+                {icon: FaLinkedin, action: linkedInShareLink, link: true },
+                {icon: FaFacebook, action: fbShareLink, link: true},
+                {icon: FaCopy, action: () => {
+                    navigator?.clipboard?.writeText(copyLink)
+                    .then(() => {
+                      alert(copyLink + ' was copied to your clipboard!')
+                    })
+                }, link: false}
+              ].map(Icon => {
+                return Icon.link 
+                  ? <a className="px-1 hover:text-gray-700" href={Icon.action}><Icon.icon/></a>
+                  : <div onClick={() => Icon?.action()}><Icon.icon/></div>
+              })} 
+            </div>
+            : null }
         </div>
 
           <div className="flex my-8 ">

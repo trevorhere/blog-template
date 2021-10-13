@@ -28,6 +28,8 @@ export default function Home() {
     }catch(error){
       console.log(error)
     }
+
+
   }, [GIST_LIST_ID])
 
 
