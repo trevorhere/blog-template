@@ -2,7 +2,7 @@ import Head from 'next/head'
 import React, { useState, useEffect } from 'react';
 import {getPosts} from '../gistService'
 import {useRouter} from 'next/router'
-import siteData from '../site-data'
+import siteData from '../services/siteData'
 import Loader from '../components/loader'
 import LoaderImage from '../components/loaderImage'
 import {FaHome} from 'react-icons/fa'
@@ -12,14 +12,14 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [loading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState([]);
-  const {GIST_LIST_ID, GITHUB_USERNAME} =  siteData
+  const {gistListId} =  siteData
   const url = `https://api.github.com/gists`
   const [selectedTags, setSelectedTags] = useState([])
 
 
   useEffect(async () => {
     try {
-      await getPosts(url, GIST_LIST_ID, setIsLoading)
+      await getPosts(url, gistListId, setIsLoading)
       .then(response => {
         if(!response?.posts) throw new Error('posts undefined', response)
         setPosts(response.posts.map(post => { return {...post, active: true}}))
@@ -30,7 +30,7 @@ export default function Home() {
     }
 
 
-  }, [GIST_LIST_ID])
+  }, [gistListId])
 
 
   useEffect(() => {

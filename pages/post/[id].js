@@ -3,14 +3,14 @@ import {useRouter} from 'next/router'
 import {getPost} from '../../gistService'
 import ReactMarkdown from 'react-markdown'
 import gfm from 'remark-gfm'
-import siteData from '../../site-data' 
+import siteData from '../../services/siteData' 
 import {FaPencilAlt, FaFacebook, FaLinkedin, FaTwitter, FaCopy, FaKickstarter  } from 'react-icons/fa'
 import Loader from '../../components/loader'
 
 
 export default function Post() {
   const router = useRouter()
-  const {GITHUB_USERNAME, baseUrl, showSocialShareLinks} = siteData
+  const {githubUsername, baseUrl, showSocialShareLinks} = siteData
   const {id} = router.query
   const [post, setPost] = useState(null);
   const [loading, setIsLoading] = useState(false);
@@ -121,7 +121,7 @@ export default function Post() {
       <button 
         type="button"
         class="fixed bottom-5 right-10 items-center px-1 py-1 border-2 border-black text-xs font-medium rounded  hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        onClick={() => router.push(`https://gist.github.com/${GITHUB_USERNAME}/${id}/edit`)}
+        onClick={() => router.push(`https://gist.github.com/${githubUsername}/${id}/edit`)}
       >   <FaPencilAlt className="mx-2 mr-2 h-3 w-3" aria-hidden="true" /></button>
     </div>
     </>
