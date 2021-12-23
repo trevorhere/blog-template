@@ -5,9 +5,10 @@ import { useEffect } from "react";
 import * as gtag from '../googleAnalytics'
 
 function MyApp({ Component, pageProps }) {
-  const router = useRouter()
+    const router = useRouter()
   useEffect(() => {
     const handleRouteChange = (url) => { 
+      console.log('handleRouteChange called')
       gtag.pageview(url)
     }
     router.events.on("routeChangeComplete", handleRouteChange);
